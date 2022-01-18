@@ -3,4 +3,5 @@
 
     <string name="iterate_btn">Iterate</string>
     <string name="start_btn">Start automation</string>
+    <string name="stop_btn">Stop automation</string>
 </resources>

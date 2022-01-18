@@ -15,6 +15,9 @@ import java.util.*
 import kotlin.collections.HashSet
 
 class CellularAutomationView: View {
+    private final val emptyCell: Int = 0
+    private final val lifeCell: Int = 1
+
     private var backgroundColor : Color = Color.valueOf(1.0f, 1.0f, 1.0f)
     private var cellColor : Color = Color.valueOf(0.0f, 0.0f, 0.0f)
 
@@ -47,9 +50,40 @@ class CellularAutomationView: View {
      * Calculate next automation iteration
      */
     fun processAutomation() {
-        //currentCells.add(Pair(5, 5))
-
+        currentCells = fullCheckCell()
         invalidate()
+    }
+
+    private fun fullCheckCell(): HashSet<Pair<Int, Int>> {
+        var newCells: HashSet<Pair<Int, Int>> = HashSet()
+
+        for (cell in currentCells) {
+            for (dx in arrayOf(-1, 0, 1)) {
+                for (dy in arrayOf(-1, 0, 1)) {
+                    if (checkCell(Pair(cell.first + dx, cell.second + dy)) == lifeCell) {
+                        newCells.add(Pair(cell.first + dx, cell.second + dy))
+                    }
+                }
+            }
+        }
+
+        return newCells
+    }
+
+    private fun checkCell(cell: Pair<Int, Int>): Int {
+        var neighbourCounter: Int = 0
+
+        for (dx in arrayOf(-1, 0, 1)) {
+            for (dy in arrayOf(-1, 0, 1)) {
+                if (dx == 0 && dy == 0) continue
+                if (currentCells.contains(Pair(cell.first + dx, cell.second + dy)))
+                    neighbourCounter += 1
+            }
+        }
+
+        if (neighbourCounter == 3 && !currentCells.contains(cell)) return lifeCell
+        else if (neighbourCounter <= 3 && neighbourCounter >= 2 && currentCells.contains(cell)) return lifeCell
+        else return emptyCell
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
