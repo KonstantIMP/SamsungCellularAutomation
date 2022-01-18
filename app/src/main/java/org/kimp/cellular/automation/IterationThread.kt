@@ -2,7 +2,7 @@ package org.kimp.cellular.automation
 
 import androidx.annotation.NonNull
 
-class IterationThread: Thread {
+class IterationThread : Thread {
     private val delayTime: Long = 300
 
     private lateinit var cellularAutomationView: CellularAutomationView
